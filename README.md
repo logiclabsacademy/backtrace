@@ -1,10 +1,13 @@
+
+# Backtrace
+## Backtrace is a project designed to hide a program's stack trace, enhancing security and preventing reverse engineering.
 ## Installation
 
 To install Backtrace, clone the repository using git with the --recurse-submodules option to ensure all submodules are cloned as well.
 
 ## Clone the Repository:
 ```bash
-git clone --recurse-submodules --depth 1https://github.com/logiclabsacademy/backtrace.git
+git clone --recurse-submodules --depth 1 https://github.com/logiclabsacademy/backtrace.git
 ```
 
 Navigate to the backtrace directory:
