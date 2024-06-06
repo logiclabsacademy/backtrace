@@ -4,39 +4,47 @@
 
 CC=gcc
 CFLAGS := -fPIC -Wall -Werror -Wpedantic -std=c2x -g -I$(LIB_DIR) -MMD 
-LDFLAGS := -shared 
 
 # Directories
 SRC_DIR:=.
-OBJ_DIR=obj
-LIB=lib
-BIN=bin
+OBJ_DIR=./obj
+LIB=./lib
+BIN=./bin
 
 SOURCES:=$(wildcard $(SRC_DIR)/**/*.c)
 OBJECTS:=$(SOURCES:%.h=$(OBJ_DIR)/%.o)
-HEADERS:=$(SOURCES:%.h)
-
+HEADERS:=$(wildcard $(SRC_DIR)/**/*.h)
 # Executable
-EXEC=$(BIN)\backtrace
+EXEC=$(BIN)/bt
 
-ifdef OS
-MKDIR=@mkdir
-RM = @del /Q
-else
-MKDIR=@mkdir -p
-RM = @rm -f
+# Commands
+MKDIR=mkdir 
+RM=rm -rf
+
+ifeq ($(OS),Windows_NT)
+	EXEC:=$(EXEC).exe
+	RM= @del 
+else 
+	RM=rm -rf
 endif
+
 
 
 all: $(EXEC)	
 
-$(EXEC): $(OBJECTS) | $(HEADERS)
-	$(MKDIR) $(dir $@)
-	$(CC) $(CFLAGS) -o $@ main.c $(LDFLAGS)
+$(EXEC): $(OBJECTS)  | $(HEADERS)
+# Create the directory if it does not exist
+	$(CC) $(CFLAGS) -o $@ main.c $< 
 
-$(OBJECTS): $(SOURCES) | $(HEADERS)
+$(OBJECTS):
+# Create the directory if it does not exist
+	$(MKDIR) $(dir $@)
+	
+
+$(OBJ_DIR)/%.o: %.c
 	$(MKDIR) $(dir $@)
 	$(CC) -c $(CFLAGS) $< -o $@
+
 
 
 clean:
