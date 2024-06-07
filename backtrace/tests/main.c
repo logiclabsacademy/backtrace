@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "../core/wrangler/wrangler.h"
-#include "../core/wrangler/wrangler_test.h"
+#include "./core/wrangler/wrangler.h"
+#include "./unit/wrangler_test.h" 
+
 int main() {
     const char *text = "Hello, World!";
     double entropy = compute_entropy(text);
@@ -17,4 +18,5 @@ int main() {
         printf("Test failed! Expected: %f, Got: %f\n", expected_entropy, entropy);
         return 1;
     }
+    
 }

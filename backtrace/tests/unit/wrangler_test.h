@@ -3,6 +3,7 @@
 #define WRANGLER_TEST_H
 
 #include "wrangler.h"
+#include <stdbool.h>
 #include <math.h>
 
 bool are_close(double a, double b, double epsilon);
