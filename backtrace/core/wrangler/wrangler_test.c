@@ -1,5 +1,7 @@
 // Function to compare floating-point values
+#include "wrangler.h"
 #include "wrangler_test.h"
+
 bool are_close(double a, double b, double epsilon) {
     return fabs(a - b) < epsilon;
 }
