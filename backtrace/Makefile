@@ -10,10 +10,13 @@ SRC_DIR:=.
 OBJ_DIR=./obj
 LIB=./lib
 BIN=./bin
+TEST_DIR=./test
 
-SOURCES:=$(wildcard $(SRC_DIR)/**/*.c)
-OBJECTS:=$(SOURCES:%.h=$(OBJ_DIR)/%.o)
+SOURCES:=$(wildcard $(SRC_DIR)/**/*.c) 
+TESTS:=$(wildcard $(SRC_DIR)/**/*.test.c)
 HEADERS:=$(wildcard $(SRC_DIR)/**/*.h)
+OBJECTS:=$(SOURCES:%.h=$(OBJ_DIR)/%.o)
+
 # Executable
 EXEC=$(BIN)/bt
 
@@ -29,7 +32,6 @@ else
 endif
 
 
-
 all: $(EXEC)	
 
 $(EXEC): $(OBJECTS)  | $(HEADERS)
@@ -39,17 +41,20 @@ $(EXEC): $(OBJECTS)  | $(HEADERS)
 $(OBJECTS):
 # Create the directory if it does not exist
 	$(MKDIR) $(dir $@)
-	
+
+$(TESTS): $(TESTS:.test.c=.test)
+
+$(TEST_DIR)/%.test: $(SRC_DIR)/%.test.c $(OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $< $(OBJECTS)	
 
 $(OBJ_DIR)/%.o: %.c
 	$(MKDIR) $(dir $@)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-
 clean:
 	$(RM) $(OBJECTS) $(EXEC) $(SOURCES:.c=.d) $(OBJECTS:.o=.d)
 
-.PHONY: all clean
+.PHONY: all test clean
 
 -include $(OBJECTS:.o=.d)
 -include $(SOURCES:.c=.d)
