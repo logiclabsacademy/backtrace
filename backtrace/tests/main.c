@@ -2,9 +2,7 @@
 #include <math.h>
 
 #include "../core/wrangler/wrangler.h"
-
-
-
+#include "../core/wrangler/wrangler_test.h"
 int main() {
     const char *text = "Hello, World!";
     double entropy = compute_entropy(text);

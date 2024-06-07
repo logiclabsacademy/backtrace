@@ -11,7 +11,7 @@ OBJ_DIR := ./obj
 LIB := ./lib
 BIN := ./bin
 TEST_DIR := ./tests
-CORE_DIR := ./core/wrangler
+CORE_DIR := ./core/
 
 SOURCES := $(wildcard $(SRC_DIR)/**/*.c)
 TEST_SOURCES := $(wildcard $(TEST_DIR)/**/*.test.c)
