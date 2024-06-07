@@ -2,59 +2,63 @@
 # Author: Nnamdi Michael Okpala
 # Project Name: Backtrace
 
-CC=gcc
-CFLAGS := -fPIC -Wall -Werror -Wpedantic -std=c99 -g -I$(LIB_DIR) -MMD 
-
+CC = gcc
+CFLAGS := -fPIC -Wall -Werror -Wpedantic -std=c99 -g -I$(HEADERS) -MMD -lm
+TFLAGS := -fPIC -Wall -Werror -Wpedantic -std=c99 -g -I$(HEADERS) -MMD -lm
 # Directories
-SRC_DIR:=.
-OBJ_DIR=./obj
-LIB=./lib
-BIN=./bin
-TEST_DIR=./test
+SRC_DIR := .
+OBJ_DIR := ./obj
+LIB := ./lib
+BIN := ./bin
+TEST_DIR := ./tests
+CORE_DIR := ./core/wrangler
 
-SOURCES:=$(wildcard $(SRC_DIR)/**/*.c) 
-TESTS:=$(wildcard $(SRC_DIR)/**/*.test.c)
-HEADERS:=$(wildcard $(SRC_DIR)/**/*.h)
-OBJECTS:=$(SOURCES:%.h=$(OBJ_DIR)/%.o)
+SOURCES := $(wildcard $(SRC_DIR)/**/*.c)
+TEST_SOURCES := $(wildcard $(TEST_DIR)/**/*.test.c)
+HEADERS := $(wildcard $(SRC_DIR)/**/*.h)
+OBJECTS := $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+TEST_OBJECTS := $(TEST_SOURCES:$(TEST_DIR)/%.test.c=$(OBJ_DIR)/%.test.o)
 
-# Executable
-EXEC=$(BIN)/bt
+# Executables
+EXEC = $(BIN)/bt
+TEST_EXEC = $(BIN)/bt.test
 
 # Commands
-MKDIR=mkdir 
-RM=rm -rf
+MKDIR = mkdir -p
+RM = rm -rf
 
 ifeq ($(OS),Windows_NT)
-	EXEC:=$(EXEC).exe
-	RM= @del 
-else 
-	RM=rm -rf
+	EXEC := $(EXEC).exe
+	RM = @del
+else
+	RM = rm -rf
 endif
 
+all: $(EXEC) $(TEST_EXEC)
 
-all: $(EXEC)	
-
-$(EXEC): $(OBJECTS)  | $(HEADERS)
-# Create the directory if it does not exist
-	$(CC) $(CFLAGS) -o $@ main.c $< 
-
-$(OBJECTS):
-# Create the directory if it does not exist
+$(EXEC): $(OBJECTS) | $(HEADERS)
 	$(MKDIR) $(dir $@)
+	$(CC) $(CFLAGS) -o $@ main.c $(OBJECTS)
 
-$(TESTS): $(TESTS:.test.c=.test)
+$(TEST_EXEC): $(TEST_OBJECTS) $(OBJECTS) | $(HEADERS)
+	$(MKDIR) $(dir $@)
+	$(CC) $(CFLAGS) -o $@ $(TEST_DIR)/wrangler.test.c $(OBJECTS)
 
-$(TEST_DIR)/%.test: $(SRC_DIR)/%.test.c $(OBJECTS)
-	$(CC) $(CFLAGS) -o $@ $< $(OBJECTS)	
-
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(MKDIR) $(dir $@)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-clean:
-	$(RM) $(OBJECTS) $(EXEC) $(SOURCES:.c=.d) $(OBJECTS:.o=.d)
+$(OBJ_DIR)/%.test.o: $(TEST_DIR)/%.test.c | $(OBJ_DIR)
+	$(MKDIR) $(dir $@)
+	$(CC) -c $(CFLAGS) $< -o $@
+ 
+$(OBJ_DIR): 
+	$(MKDIR) $(OBJ_DIR)
 
-.PHONY: all test clean
+clean:
+	$(RM) $(OBJECTS) $(TEST_OBJECTS) $(EXEC) $(TEST_EXEC) $(SOURCES:.c=.d) $(OBJECTS:.o=.d)
+
+.PHONY: all clean
 
 -include $(OBJECTS:.o=.d)
 -include $(SOURCES:.c=.d)
