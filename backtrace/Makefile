@@ -46,7 +46,6 @@ $(OBJ_DIR)/%.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
 
-
 clean:
 	$(RM) $(OBJECTS) $(EXEC) $(SOURCES:.c=.d) $(OBJECTS:.o=.d)
 

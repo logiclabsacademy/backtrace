@@ -17,7 +17,7 @@ struct WPixel {
     const unsigned int r,g,b,a;
 };
 
-// A wrangler image 
+// A Wrangler image 
 typedef struct WImage_s WImage;
 struct WImage_s {
     const int width, height;

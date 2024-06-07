@@ -1,6 +1,6 @@
 
 # Backtrace
-## Backtrace is a project designed to ultimatelty hide and obscure a program's stack trace, enhancing security and preventing reverse engineering.
+## Backtrace is a project designed to obscure and ultimately hide a program's stack trace, enhancing security and preventing reverse engineering.
 ## Installation
 
 To install Backtrace, clone the repository using git with the --recurse-submodules option to ensure all submodules are cloned as well.
