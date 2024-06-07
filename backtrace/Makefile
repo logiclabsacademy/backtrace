@@ -3,7 +3,7 @@
 # Project Name: Backtrace
 
 CC=gcc
-CFLAGS := -fPIC -Wall -Werror -Wpedantic -std=c2x -g -I$(LIB_DIR) -MMD 
+CFLAGS := -fPIC -Wall -Werror -Wpedantic -std=c99 -g -I$(LIB_DIR) -MMD 
 
 # Directories
 SRC_DIR:=.
