@@ -1,5 +1,5 @@
 // Author : Nnamdi Michael Okpala
-// Description: Wrangler - Code Mangler and Demangler
+// Description: Wrangler - Code Mangler,and Demangler
 
 #ifndef WRANGLER_H
 #define WRANGLER_H
@@ -9,21 +9,24 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-
+#include <math.h>
 
 // A Wrangler Pixel
-typedef struct WPixel_s WPixel;
-struct WPixel {
-    const unsigned int r,g,b,a;
-};
+typedef struct WPixel_s {
+     unsigned int r, g, b;
+} WPixel;
 
 // A Wrangler image 
-typedef struct WImage_s WImage;
-struct WImage_s {
-    const int width, height;
+typedef struct WImage_s {
+    int width, height;
     WPixel *pixels;
-};
+} WImage;
+
+// Function prototypes
+double compute_entropy(const char *text);
+WImage* generate_image(double entropy, int width, int height);
+void print_image(WImage *image);
+
+#endif // WRANGLER_H
 
 
-
-#endif

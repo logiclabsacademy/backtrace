@@ -29,4 +29,4 @@ $$
 Where $$ p(xi​)$$ is the probability of character $$x_i$$​.
 ```
 
-Using this we can accurately measure entropy,
+Using this we can accurately measure entropy,I want then create a WPPMImage
