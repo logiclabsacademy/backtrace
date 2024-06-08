@@ -55,3 +55,8 @@ void print_image(WImage *image) {
     }
 }
 
+
+void WImage_free(WImage *image) {
+    free(image->pixels);
+    free(image);
+}

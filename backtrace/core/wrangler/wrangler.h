@@ -24,9 +24,12 @@ typedef struct WImage_s {
 
 // Function prototypes
 double compute_entropy(const char *text);
-WImage* generate_image(double entropy, int width, int height);
+WImage* WImage_write_image(double entropy, int width, int height);
+void WImage_free(WImage *image);
 void print_image(WImage *image);
 
 #endif // WRANGLER_H
+
+
 
 
