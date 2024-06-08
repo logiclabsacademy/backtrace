@@ -23,7 +23,7 @@ double compute_entropy(const char *text) {
 }
 
 // Function to generate a WImage based on entropy
-WImage* generate_image(double entropy, int width, int height) {
+WImage* WImage_write_image(double entropy, int width, int height) {
     WImage *image = (WImage *)malloc(sizeof(WImage));
     image->width = width;
     image->height = height;

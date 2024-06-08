@@ -1,5 +1,5 @@
 // Author : Nnamdi Michael Okpala
-// Description: Wrangler - Code Mangler,and Demangler
+// Description: Wrangler - Code Mangler, and Demangler
 
 #ifndef WRANGLER_H
 #define WRANGLER_H
