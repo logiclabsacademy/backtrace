@@ -1,14 +1,14 @@
 #include <stdio.h>
-#ifdef _LINUX
+#ifdef __linux__
 #include <execinfo.h>
 #include <dlfcn.h>
 #include <stdint.h>
-#elif  _WIN32
+#elif defined(_WIN32)
 #include <windows.h>
 #include <DbgHelp.h>
 #endif
 
-
+#ifdef __linux__
 // Original backtrace function pointer
 static int (*original_backtrace)(void**, int) = NULL;
 
@@ -25,7 +25,6 @@ int custom_backtrace(void** buffer, int size) {
     return frames;
 }
 
-// Function to set up the hook
 __attribute__((constructor))
 void setup_hook() {
     original_backtrace = dlsym(RTLD_NEXT, "backtrace");
@@ -33,11 +32,46 @@ void setup_hook() {
         fprintf(stderr, "Error: Unable to find original backtrace function.\n");
     }
 }
+#elif defined(_WIN32)
+// Original function pointers
+typedef USHORT (WINAPI *RtlCaptureStackBackTraceType)(ULONG FramesToSkip, ULONG FramesToCapture, PVOID *BackTrace, PULONG BackTraceHash);
+static RtlCaptureStackBackTraceType original_RtlCaptureStackBackTrace = NULL;
+
+// Custom backtrace handler
+USHORT WINAPI custom_RtlCaptureStackBackTrace(ULONG FramesToSkip, ULONG FramesToCapture, PVOID *BackTrace, PULONG BackTraceHash) {
+    // Call the original function
+    USHORT frames = original_RtlCaptureStackBackTrace(FramesToSkip, FramesToCapture, BackTrace, BackTraceHash);
+
+    // Obfuscate/mangle the stack trace frames
+    for (USHORT i = 0; i < frames; i++) {
+        BackTrace[i] = (PVOID)((uintptr_t)BackTrace[i] ^ 0xDEADBEEF); // Example mangling
+    }
+
+    return frames;
+}
+
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved) {
+    if (fdwReason == DLL_PROCESS_ATTACH) {
+        original_RtlCaptureStackBackTrace = (RtlCaptureStackBackTraceType)GetProcAddress(GetModuleHandle("ntdll.dll"), "RtlCaptureStackBackTrace");
+        if (!original_RtlCaptureStackBackTrace) {
+            fprintf(stderr, "Error: Unable to find original RtlCaptureStackBackTrace function.\n");
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+#endif
 
 int main() {
-    // Example usage
+#ifdef __linux__
+    // Example usage on Linux
     void* buffer[10];
     int frames = backtrace(buffer, 10);
+#elif defined(_WIN32)
+    // Example usage on Windows
+    PVOID buffer[10];
+    USHORT frames = RtlCaptureStackBackTrace(0, 10, buffer, NULL);
+#endif
 
     // Print the stack trace
     for (int i = 0; i < frames; i++) {
