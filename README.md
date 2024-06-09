@@ -15,7 +15,6 @@ Navigate to the backtrace directory:
 cd backtrace
 ```
 
-
 ## Building the Project
 
 The project is built using gcc with specific compiler flags and adheres to the C2x standard. Below are the steps to build and clean the project locally.
@@ -25,7 +24,6 @@ To build the project, run the following command in the project directory:
 ```bash
 make
 ```
-
 
 This will compile the source files and generate the executable in the bin directory.
 ## Cleaning
