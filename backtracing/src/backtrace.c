@@ -1,12 +1,14 @@
 #include <stdio.h>
-#if defined(__linux__)
+#ifdef _LINUX
 #include <execinfo.h>
 #include <dlfcn.h>
-#elif defined(_WIN32)
-// Include the necessary headers for Windows platform
-#else 
-#error "Unsupported platform"
+#include <stdint.h>
+#elif  _WIN32
+#include <windows.h>
+#include <DbgHelp.h>
 #endif
+
+
 // Original backtrace function pointer
 static int (*original_backtrace)(void**, int) = NULL;
 
@@ -24,24 +26,15 @@ int custom_backtrace(void** buffer, int size) {
 }
 
 // Function to set up the hook
+__attribute__((constructor))
 void setup_hook() {
     original_backtrace = dlsym(RTLD_NEXT, "backtrace");
     if (!original_backtrace) {
         fprintf(stderr, "Error: Unable to find original backtrace function.\n");
-        return;
-    }
-
-    // Set the custom backtrace handler
-    if (dlinfo(RTLD_SELF, RTLD_DI_LINKMAP, &custom_backtrace) != 0) {
-        fprintf(stderr, "Error: Unable to set custom backtrace handler.\n");
-        return;
     }
 }
 
 int main() {
-    // Set up the hook
-    setup_hook();
-
     // Example usage
     void* buffer[10];
     int frames = backtrace(buffer, 10);
@@ -53,4 +46,3 @@ int main() {
 
     return 0;
 }
-
