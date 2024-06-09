@@ -35,7 +35,6 @@ int fib(int n) {
 int main() {
     int n = 10; // Change this value to test different inputs
     printf("Fibonacci of %d is %d\n", n, fib(n));
-
     // Test with negative input to trigger the backtrace
     n = -5;
     printf("Fibonacci of %d is %d\n", n, fib(n));
