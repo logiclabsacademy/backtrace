@@ -3,8 +3,13 @@
 # Project Name: Backtrace
 
 CC=gcc
-CFLAGS := -fPIC -Wall -Werror -Wpedantic -std=c99 -g -I$(LIB_DIR) -MMD 
+CFLAGS := -fPIC -Wall -Werror -Wpedantic -std=c99  -I$(LIB_DIR) -MMD 
 
+ifeq ($(DEBUG),1)
+	CFLAGS += -g
+else
+	CFLAGS += -O2
+	
 # Directories
 SRC_DIR:=.
 OBJ_DIR=./obj
@@ -23,9 +28,11 @@ RM=rm -rf
 
 ifeq ($(OS),Windows_NT)
 	EXEC:=$(EXEC).exe
-	RM= @del 
+	RM= @del
+	CFLAGS += -DWIN32
 else 
 	RM=rm -rf
+	CFLAGS += -DUNIX
 endif
 
 
