@@ -6,6 +6,7 @@
 #elif defined(_WIN32)
 #include <windows.h>
 #include <DbgHelp.h>
+#include <stdint.h>
 #endif
 
 #ifdef __linux__
@@ -62,7 +63,6 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved) {
 }
 #endif
 
-//Application code
 int main() {
 #ifdef __linux__
     // Example usage on Linux
