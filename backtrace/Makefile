@@ -19,6 +19,7 @@ BIN=./bin
 SOURCES:=$(wildcard $(SRC_DIR)/**/*.c)
 OBJECTS:=$(SOURCES:%.h=$(OBJ_DIR)/%.o)
 HEADERS:=$(wildcard $(SRC_DIR)/**/*.h)
+
 # Executable
 EXEC=$(BIN)/bt
 
@@ -34,7 +35,6 @@ else
 	RM=rm -rf
 	CFLAGS += -DUNIX
 endif
-
 
 
 all: $(EXEC)	
