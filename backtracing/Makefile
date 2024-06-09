@@ -1,14 +1,27 @@
 CC = gcc
 CFLAGS = -std=c2x -Wall -fPIC
-LDFLAGS = -ldl
 
-all: backtrace.so
+# Detect platform
+ifeq ($(OS),Windows_NT)
+    TARGET = backtrace.dll
+    CFLAGS += -D_WIN32
+    LDFLAGS =
+else
+    TARGET = backtrace.so
+    CFLAGS += -D__linux__
+    LDFLAGS = -ldl
+endif
+
+all: $(TARGET)
 
 backtrace.so: src/backtrace.o
-	$(CC) -shared -o bin/backtrace.so src/backtrace.o $(LDFLAGS)
+	$(CC) -shared -o bin/$@ $< $(LDFLAGS)
+
+backtrace.dll: src/backtrace.o
+	$(CC) -shared -o bin/$@ $< $(LDFLAGS)
 
 src/backtrace.o: src/backtrace.c
-	$(CC) $(CFLAGS) -c src/backtrace.c -o src/backtrace.o
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f src/*.o bin/backtrace.so
+	rm -f src/*.o bin/$(TARGET)
