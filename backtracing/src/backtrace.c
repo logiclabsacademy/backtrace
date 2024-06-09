@@ -62,6 +62,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved) {
 }
 #endif
 
+//Application code
 int main() {
 #ifdef __linux__
     // Example usage on Linux
