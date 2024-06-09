@@ -15,11 +15,10 @@ endif
 all: $(TARGET) fib
 
 fib: src/fib.o
-    $(CC) $(CFLAGS) -o bin/$@ $<
+	$(CC) $(CFLAGS) -o bin/$@ $<
 
 src/fib.o: src/fib.c
-    $(CC) $(CFLAGS) -c $< -o $@
-
+	$(CC) $(CFLAGS) -c $< -o $@
 
 backtrace.so: src/backtrace.o
 	$(CC) -shared -o bin/$@ $< $(LDFLAGS)
